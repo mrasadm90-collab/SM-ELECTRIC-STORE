@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - SM Electric Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-4 sm:p-8">
+    <div class="max-w-3xl mx-auto space-y-6">
+        <div class="flex justify-between items-center pb-4 border-b border-slate-800">
+            <h1 class="text-xl font-black text-white">⚙️ Admin Dashboard</h1>
+            <a href="index.html" class="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm font-semibold text-slate-200">← View Website</a>
+        </div>
+
+        <!-- Store & Banner Settings -->
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+            <h2 class="text-lg font-bold text-amber-400">Store & Banner Settings</h2>
+            <div>
+                <label class="block text-xs font-semibold text-slate-400 mb-1">Top Banner / Announcement Text</label>
+                <input type="text" id="announcement" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Owner Name</label>
+                    <input type="text" id="owner" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" />
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">Phone / WhatsApp</label>
+                    <input type="text" id="phone" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" />
+                </div>
+            </div>
+            <button onclick="saveSettings()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-6 py-2.5 rounded-xl text-sm transition">Save Settings</button>
+        </div>
+
+        <!-- Add New Product -->
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+            <h2 class="text-lg font-bold text-amber-400">Add New Product / Item</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <input type="text" id="p-name" placeholder="Item Name" class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" />
+                <input type="text" id="p-price" placeholder="Price (e.g. Rs. 1500)" class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" />
+                <input type="text" id="p-desc" placeholder="Short Details" class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white" />
+            </div>
+            <button onclick="addProduct()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-6 py-2.5 rounded-xl text-sm transition">Add Product</button>
+        </div>
+    </div>
+
+    <script>
+        // Load existing settings
+        const settings = JSON.parse(localStorage.getItem('sm_settings')) || {
+            storeName: "SM ELECTRIC STORE",
+            owner: "Mr. Asad Ali",
+            phone: "03700390346",
+            address: "Tehsil Dar Chowk, Kasur",
+            announcement: "⚡ SM Electric Store – Premier Electrical & Solar Supplies in Kasur"
+        };
+        document.getElementById('announcement').value = settings.announcement;
+        document.getElementById('owner').value = settings.owner;
+        document.getElementById('phone').value = settings.phone;
+
+        function saveSettings() {
+            settings.announcement = document.getElementById('announcement').value;
+            settings.owner = document.getElementById('owner').value;
+            settings.phone = document.getElementById('phone').value;
+            localStorage.setItem('sm_settings', JSON.stringify(settings));
+            alert('Settings & Banner updated successfully!');
+        }
+
+        function addProduct() {
+            const name = document.getElementById('p-name').value;
+            const price = document.getElementById('p-price').value;
+            const desc = document.getElementById('p-desc').value;
+            if(!name || !price) {
+                alert('Please enter product name and price!');
+                return;
+            }
+            let products = JSON.parse(localStorage.getItem('sm_products')) || [
+                { name: "Copper Wiring Roll", price: "Rs. 4,500", desc: "High grade pure copper wire roll." },
+                { name: "Circuit Breaker 63A", price: "Rs. 2,200", desc: "Reliable protection breaker." }
+            ];
+            products.push({ name, price, desc });
+            localStorage.setItem('sm_products', JSON.stringify(products));
+            alert('Product added successfully!');
+            document.getElementById('p-name').value = '';
+            document.getElementById('p-price').value = '';
+            document.getElementById('p-desc').value = '';
+        }
+    </script>
+</body>
+</html>
